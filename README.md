@@ -1,17 +1,15 @@
-# shop_provider
+# Інтернет-магазин на Provider
 
-A new Flutter project.
+У цій роботі був створений простий інтернет-магазин з каталогом товарів, кошиком та оформленням замовлення. Для керування станом використано пакет Provider. Дані каталогу завантажуються через FakeApi із затримкою, а також імітуються помилки сервера для перевірки обробки виняткових ситуацій
 
-## Getting Started
+У проєкті використано три моделі: CatalogModel для роботи з каталогом, CartModel для кошика та OrderModel для оформлення замовлення. Усі моделі підключені через MultiProvider над MaterialApp. У віджетах застосовуються context.watch для відстеження змін стану, context.read для виклику методів у колбеках, а також context.select і Selector для зменшення кількості перебудов інтерфейсу
 
-This project is a starting point for a Flutter application.
+Реалізовано перегляд каталогу, фільтрацію товарів за категоріями, перегляд інформації про товар, додавання товарів до кошика, зміну кількості, видалення позицій та підрахунок загальної суми. Під час оформлення замовлення відображається індикатор завантаження, а після успішного запиту кошик очищується. У разі помилки користувач отримує відповідне повідомлення
 
-A few resources to get you started if this is your first Flutter project:
+Для аналізу перебудов використовувався debugPrint(). До оптимізації при зміні стану перебудовувалося більше віджетів, ніж потрібно. Після використання context.select і Selector перебудовуються лише картка потрібного товару та бейдж кошика, що дозволило зменшити кількість зайвих перебудов і зробити застосунок ефективнішим
 
-- [Learn Flutter](https://docs.flutter.dev/get-started/learn-flutter)
-- [Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Flutter learning resources](https://docs.flutter.dev/reference/learning-resources)
-
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+| Дія | До оптимізації | Після оптимізації |
+|------|------|------|
+| Додавання товару | 8 build() | 2 build() |
+| Зміна кількості товару | 8 build() | 2 build() |
+| Видалення товару | 8 build() | 2 build() |
