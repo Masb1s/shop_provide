@@ -10,6 +10,19 @@ class CartScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final cart = context.watch<CartModel>();
 
+    if (cart.itemCount == 0) {
+      return Scaffold(
+        appBar: AppBar(
+          title: const Text('Кошик'),
+        ),
+        body: const Center(
+          child: Text(
+            'Кошик порожній',
+          ),
+        ),
+      );
+    }
+
     return Scaffold(
       appBar: AppBar(
         title: const Text('Кошик'),
@@ -22,73 +35,105 @@ class CartScreen extends StatelessWidget {
                 final quantity =
                     cart.quantities[product.id]!;
 
-                return ListTile(
-                  title: Text(product.name),
-
-                  subtitle: Text(
-                    'Кількість: $quantity',
+                return Card(
+                  margin: const EdgeInsets.symmetric(
+                    horizontal: 8,
+                    vertical: 4,
                   ),
-
-                  trailing: Row(
-                    mainAxisSize:
-                        MainAxisSize.min,
-                    children: [
-                      IconButton(
-                        onPressed: () {
-                          cart.decrease(
-                            product.id,
-                          );
-                        },
-                        icon: const Icon(
-                          Icons.remove,
+                  child: ListTile(
+                    title: Text(product.name),
+                    subtitle: Column(
+                      crossAxisAlignment:
+                          CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          'Ціна: ${product.price} ₴',
                         ),
-                      ),
-
-                      IconButton(
-                        onPressed: () {
-                          cart.increase(
-                            product.id,
-                          );
-                        },
-                        icon: const Icon(
-                          Icons.add,
+                        Text(
+                          'Кількість: $quantity',
                         ),
-                      ),
-
-                      IconButton(
-                        onPressed: () {
-                          cart.remove(
-                            product.id,
-                          );
-                        },
-                        icon: const Icon(
-                          Icons.delete,
+                      ],
+                    ),
+                    trailing: Row(
+                      mainAxisSize:
+                          MainAxisSize.min,
+                      children: [
+                        IconButton(
+                          onPressed: () {
+                            cart.decrease(
+                              product.id,
+                            );
+                          },
+                          icon: const Icon(
+                            Icons.remove,
+                          ),
                         ),
-                      ),
-                    ],
+
+                        Text('$quantity'),
+
+                        IconButton(
+                          onPressed: () {
+                            cart.increase(
+                              product.id,
+                            );
+                          },
+                          icon: const Icon(
+                            Icons.add,
+                          ),
+                        ),
+
+                        IconButton(
+                          onPressed: () {
+                            cart.remove(
+                              product.id,
+                            );
+                          },
+                          icon: const Icon(
+                            Icons.delete,
+                            color: Colors.red,
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
                 );
               }).toList(),
             ),
           ),
 
-          Padding(
-            padding:
-                const EdgeInsets.all(16),
+          Container(
+            padding: const EdgeInsets.all(16),
             child: Column(
               children: [
                 Text(
-                  'Сума: ${cart.totalPrice} ₴',
+                  'Загальна сума: ${cart.totalPrice.toStringAsFixed(2)} ₴',
+                  style: const TextStyle(
+                    fontSize: 18,
+                    fontWeight: FontWeight.bold,
+                  ),
                 ),
 
                 const SizedBox(
                   height: 16,
                 ),
 
-                ElevatedButton(
-                  onPressed: () {},
-                  child: const Text(
-                    'Оформити замовлення',
+                SizedBox(
+                  width: double.infinity,
+                  child: ElevatedButton(
+                    onPressed: () {
+                      ScaffoldMessenger.of(
+                        context,
+                      ).showSnackBar(
+                        const SnackBar(
+                          content: Text(
+                            'Замовлення оформлено',
+                          ),
+                        ),
+                      );
+                    },
+                    child: const Text(
+                      'Оформити замовлення',
+                    ),
                   ),
                 ),
               ],

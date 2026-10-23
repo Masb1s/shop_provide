@@ -3,7 +3,6 @@ import 'package:provider/provider.dart';
 
 import '../models/product.dart';
 import '../providers/cart_model.dart';
-import '../screens/product_screen.dart';
 
 class ProductCard extends StatelessWidget {
   const ProductCard({
@@ -24,53 +23,65 @@ class ProductCard extends StatelessWidget {
       (cart) =>
           cart.quantities[product.id] ?? 0,
     );
-    final children = [
-      Text(product.category),
-      Text('${product.price} ₴'),
-      if (quantity > 0)
-        Row(
+
+    return Card(
+      margin: const EdgeInsets.all(8),
+      child: ListTile(
+        title: Text(product.name),
+        subtitle: Column(
+          crossAxisAlignment:
+              CrossAxisAlignment.start,
           children: [
+            Text(product.category),
+            Text('${product.price} ₴'),
             Text('У кошику: $quantity'),
-            const SizedBox(width: 8),
+          ],
+        ),
+        trailing: Row(
+          mainAxisSize:
+              MainAxisSize.min,
+          children: [
+            IconButton(
+              onPressed: quantity == 0
+                  ? null
+                  : () {
+                      context
+                          .read<CartModel>()
+                          .decrease(
+                            product.id,
+                          );
+                    },
+              icon: const Icon(
+                Icons.remove,
+              ),
+            ),
             IconButton(
               onPressed: () {
-                context.read<CartModel>().decrease(product.id);
+                context
+                    .read<CartModel>()
+                    .add(product);
               },
               icon: const Icon(
-                Icons.remove_circle,
+                Icons.add,
+              ),
+            ),
+            IconButton(
+              onPressed: quantity == 0
+                  ? null
+                  : () {
+                      context
+                          .read<CartModel>()
+                          .remove(
+                            product.id,
+                          );
+                    },
+              icon: const Icon(
+                Icons.delete,
                 color: Colors.red,
               ),
             ),
           ],
         ),
-    ];
-    return Card(
-      margin: const EdgeInsets.all(8),
-      child: ListTile(
-        title: Text(product.name),
-
-        subtitle: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: children,
-        ),
-        trailing: ElevatedButton(
-          onPressed: () {
-            context.read<CartModel>().add(product);
-          },
-          child: const Text('До кошика'),
-        ),
-
-        onTap: () {
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (_) =>
-                  ProductScreen(
-                product: product,
-              ),
-            ),
-          );
-        },
       ),
     );
   }
