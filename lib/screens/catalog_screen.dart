@@ -1,27 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import '../widgets/product_card.dart';
-import '../providers/cart_model.dart';
+
 import '../providers/catalog_model.dart';
+import '../widgets/product_card.dart';
+import '../widgets/cart_badge.dart';
 
-class CartBadge extends StatelessWidget {
-  const CartBadge({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return Selector<CartModel, int>(
-      selector: (_, cart) => cart.itemCount,
-      builder: (_, count, _) {
-        return Badge(
-          label: Text('$count'),
-          child: const Icon(
-            Icons.shopping_cart,
-          ),
-        );
-      },
-    );
-  }
-}
 class CatalogScreen extends StatefulWidget {
   const CatalogScreen({super.key});
 
@@ -32,18 +15,18 @@ class CatalogScreen extends StatefulWidget {
 
 class _CatalogScreenState extends State<CatalogScreen> {
   @override
-void initState() {
-  super.initState();
+  void initState() {
+    super.initState();
 
-  WidgetsBinding.instance
-      .addPostFrameCallback((_) {
-    if (mounted) {
-      context
-          .read<CatalogModel>()
-          .loadProducts();
-    }
-  });
-}
+    WidgetsBinding.instance
+        .addPostFrameCallback((_) {
+      if (mounted) {
+        context
+            .read<CatalogModel>()
+            .loadProducts();
+      }
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -54,18 +37,18 @@ void initState() {
 
     return Scaffold(
       appBar: AppBar(
-     title: const Text(
-      'Каталог товарів',
-     ),
-    actions: const [
-      Padding(
-      padding: EdgeInsets.only(
-        right: 16,
+        title: const Text(
+          'Каталог товарів',
+        ),
+        actions: const [
+          Padding(
+            padding: EdgeInsets.only(
+              right: 16,
+            ),
+            child: CartBadge(),
+          ),
+        ],
       ),
-      child: CartBadge(),
-    ),
-  ],
-),
       body: Builder(
         builder: (_) {
           if (catalog.isLoading) {
@@ -90,8 +73,7 @@ void initState() {
                   ElevatedButton(
                     onPressed: () {
                       context
-                          .read<
-                              CatalogModel>()
+                          .read<CatalogModel>()
                           .loadProducts();
                     },
                     child: const Text(
@@ -106,7 +88,10 @@ void initState() {
           return ListView.builder(
             itemCount:
                 catalog.products.length,
-            itemBuilder: (context, index) {
+            itemBuilder: (
+              context,
+              index,
+            ) {
               final product =
                   catalog.products[index];
 

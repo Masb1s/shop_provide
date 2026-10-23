@@ -11,13 +11,12 @@ class OrderModel extends ChangeNotifier {
   bool isLoading = false;
   String? errorMessage;
 
-  Future<void> checkout(
-    CartModel cart,
-  ) async {
+  Future<void> checkout(CartModel cart) async {
+    if (isLoading) return;
+
     try {
       isLoading = true;
       errorMessage = null;
-
       notifyListeners();
 
       await api.sendOrder();

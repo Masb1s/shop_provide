@@ -14,16 +14,21 @@ class CartBadge extends StatelessWidget {
       builder: (context, count, child) {
         return IconButton(
           onPressed: () {
+            debugPrint('Cart pressed');
+
             Navigator.push(
               context,
               MaterialPageRoute(
-                builder: (_) => const CartScreen(),
+                builder: (context) => const CartScreen(),
               ),
             );
           },
+
           icon: Badge(
             label: Text('$count'),
-            child: const Icon(Icons.shopping_cart),
+            child: const Icon(
+              Icons.shopping_cart,
+            ),
           ),
         );
       },
