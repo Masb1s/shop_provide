@@ -24,37 +24,40 @@ class ProductCard extends StatelessWidget {
       (cart) =>
           cart.quantities[product.id] ?? 0,
     );
-
+    final children = [
+      Text(product.category),
+      Text('${product.price} ₴'),
+      if (quantity > 0)
+        Row(
+          children: [
+            Text('У кошику: $quantity'),
+            const SizedBox(width: 8),
+            IconButton(
+              onPressed: () {
+                context.read<CartModel>().decrease(product.id);
+              },
+              icon: const Icon(
+                Icons.remove_circle,
+                color: Colors.red,
+              ),
+            ),
+          ],
+        ),
+    ];
     return Card(
       margin: const EdgeInsets.all(8),
       child: ListTile(
         title: Text(product.name),
 
         subtitle: Column(
-          crossAxisAlignment:
-              CrossAxisAlignment.start,
-          children: [
-            Text(product.category),
-            Text(
-              '${product.price} ₴',
-            ),
-
-            if (quantity > 0)
-              Text(
-                'У кошику: $quantity',
-              ),
-          ],
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: children,
         ),
-
         trailing: ElevatedButton(
           onPressed: () {
-            context
-                .read<CartModel>()
-                .add(product);
+            context.read<CartModel>().add(product);
           },
-          child: const Text(
-            'До кошика',
-          ),
+          child: const Text('До кошика'),
         ),
 
         onTap: () {
