@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-
+import '../widgets/product_card.dart';
 import '../providers/catalog_model.dart';
 
 class CatalogScreen extends StatefulWidget {
@@ -80,14 +80,8 @@ class _CatalogScreenState extends State<CatalogScreen> {
               final product =
                   catalog.products[index];
 
-              return ListTile(
-                title: Text(product.name),
-                subtitle:
-                    Text(product.category),
-                trailing:
-                    Text(
-                      '${product.price} ₴',
-                    ),
+              return ProductCard(
+                product: product,
               );
             },
           );
